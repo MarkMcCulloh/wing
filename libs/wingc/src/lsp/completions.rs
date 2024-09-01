@@ -41,6 +41,8 @@ fn check_ts_to_completions(interesting_node: &Node) -> bool {
 
 	let mut no_completions = match interesting_node_kind {
 		"comment" => true,
+		"doc" => true,
+		"doc_content" => true,
 
 		// Loose backslash? Get outta here
 		"\\" => true,
@@ -2060,6 +2062,16 @@ String.
      //^
 "#,
 		assert!(no_completion_wrong_builtin.is_empty())
+	);
+
+	test_completion_list!(
+		no_completion_in_doc_comment,
+		r#"
+/// l
+   //^
+class C { }
+"#,
+		assert!(no_completion_in_doc_comment.is_empty())
 	);
 
 	test_completion_list!(
